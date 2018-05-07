@@ -62,6 +62,7 @@ alter table user_role add FOREIGN KEY (user_id) REFERENCES user(id);
 alter table user_role add FOREIGN KEY (role_id) REFERENCES role(id);
 #password is 12345
 insert into user(username, password, active) values ('vlada', '$2a$10$F8lmAomUtMtg8/vyIZXv.efwx4LfuZ5nKZlstZcCww1zkDdyVJ6PW', true );
+insert into role(name) values ('ROLE_SUPERADMIN');
 insert into role(name) values ('ROLE_USER');
 insert into role(name) values ('ROLE_ADMIN');
-insert into user_role values (1, 2);
+insert into user_role values (1, 1);

@@ -15,7 +15,9 @@ public interface PlayerService {
 
     Player save(Player player);
 
-    Player update(Player player);
+    Player update(Player player, int id);
 
     void delete(Player player);
+
+    void enable(Player player);
 }

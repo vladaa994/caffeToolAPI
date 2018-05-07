@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public class UserValidator{
     private List<MessageDto> errors = new ArrayList<MessageDto>();
 
     public List<MessageDto> validate(UserDto user) {
+
         if(!(checkUsername(user.getUsername()))){
             MessageDto messageDto = new MessageDto("Username must contain at least 3 characters");
             errors.add(messageDto);
@@ -47,6 +49,14 @@ public class UserValidator{
         else {
             return true;
         }
+    }
+
+
+    public List<MessageDto> checkEditUsername(String username) {
+        if(!checkUsername(username)) {
+            this.errors.add(new MessageDto("Username must contain at least 3 characters"));
+        }
+        return errors;
     }
 }
 

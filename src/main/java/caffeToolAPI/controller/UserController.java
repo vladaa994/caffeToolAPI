@@ -32,14 +32,14 @@ public class UserController {
 
 
     @RequestMapping(value = "/all/active", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
     public ResponseEntity<List<User>> getAllActive() {
         List<User> users = userService.findAllActive();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/all/removed", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
     public ResponseEntity<List<User>> getAllRemoved() {
         List<User> users = userService.findAllRemoved();
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
     public ResponseEntity<?> save(@RequestBody UserDto user) {
 
         if(userService.findByUsername(user.getUsername()) != null) {
@@ -74,11 +74,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> update(@RequestBody UserDto userDto, @PathVariable int id) {
+    @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
+    public ResponseEntity<?> update(@RequestBody UserDto userDto, @PathVariable("id") int id) {
 
-        if(userService.findByUsername(userDto.getUsername()) != null) {
-            return new ResponseEntity<>(new MessageDto("Username already exists."), HttpStatus.BAD_REQUEST);
+        if(userService.findById(id) == null) {
+            return new ResponseEntity<>(new MessageDto("Username doesn't exists."), HttpStatus.BAD_REQUEST);
         }
         User usr = userService.update(userDto, id);
         if(usr != null){
@@ -91,7 +91,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
     public ResponseEntity<?> delete(@PathVariable int id) {
         User user = userService.findById(id);
         if(user != null){
@@ -100,6 +100,28 @@ public class UserController {
         }
         else {
             return new ResponseEntity<>(new MessageDto("User doesn't exists."), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/check-username", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
+    public ResponseEntity<?> checkUsername(@RequestParam String username) {
+        if(!userService.checkUsername(username)) {
+            return new ResponseEntity<MessageDto>(new MessageDto("Username already exists!"), HttpStatus.BAD_REQUEST);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(value = "/enable", method = RequestMethod.GET)
+    public ResponseEntity<MessageDto> enableUser(@RequestParam int id) {
+        User user = userService.enableUser(id);
+        if(user != null) {
+            return new ResponseEntity<>(new MessageDto("User successfully enabled!"), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(new MessageDto("User with id: " + id + "doesn't exist!"), HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -23,4 +23,8 @@ public interface UserService {
     User findByUsername(String username);
 
     void delete(User user);
+
+    boolean checkUsername(String username);
+
+    User enableUser(int id);
 }

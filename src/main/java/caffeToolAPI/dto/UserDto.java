@@ -1,9 +1,5 @@
 package caffeToolAPI.dto;
 
-import caffeToolAPI.model.Role;
-
-import java.util.List;
-
 /**
  * Created by pc-mg on 3/22/2018.
  */

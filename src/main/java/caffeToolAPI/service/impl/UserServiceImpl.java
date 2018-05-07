@@ -80,18 +80,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(UserDto userDto, int id) {
         User usr = findById(id);
+        List<MessageDto> errors;
         if(usr != null){
-            List<MessageDto> errors = userValidator.validate(userDto);
-            if(errors != null && errors.size() == 0){
-                usr.setUsername(userDto.getUsername());
-                usr.setPassword(userDto.getPassword());
-                return userRepository.save(usr);
+            if(userDto.getPassword() == null){
+                errors = userValidator.checkEditUsername(userDto.getUsername());
+                if(errors == null || errors.size() == 0){
+                    usr.setUsername(userDto.getUsername());
+                    return userRepository.save(usr);
+                }
+                else {
+                    return null;
+                }
             }
             else {
-                return null;
+                errors = userValidator.validate(userDto);
+                if(errors == null || errors.size() == 0) {
+                    usr.setUsername(userDto.getUsername());
+                    usr.setPassword(userDto.getPassword());
+                    return userRepository.save(usr);
+                }
+                else {
+                    return null;
+                }
+                }
             }
-
-        }
         else {
             return null;
         }
@@ -106,5 +118,29 @@ public class UserServiceImpl implements UserService {
     public void delete(User user) {
         user.setIsActive(false);
         userRepository.save(user);
+    }
+
+
+    @Override
+    public boolean checkUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user != null) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    @Override
+    public User enableUser(int id) {
+        User user = userRepository.findOne(id);
+        if(user != null) {
+            user.setIsActive(true);
+            return userRepository.save(user);
+        }
+        else {
+            return null;
+        }
     }
 }
