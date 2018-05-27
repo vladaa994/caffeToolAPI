@@ -26,7 +26,7 @@ public class User implements Serializable{
 	private String username;
 
 	//bi-directional many-to-one association to Game
-	@JsonManagedReference
+	@JsonIgnore
 	@OneToMany(mappedBy="user")
 	private List<Game> games;
 
@@ -36,6 +36,7 @@ public class User implements Serializable{
 	@JoinTable(name = "user_role",
 	joinColumns= @JoinColumn(name = "user_id", referencedColumnName = "id"),
 	inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+
 	private List<Role> roles;
 
 	public int getId() {

@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,14 +34,14 @@ public class UserController {
 
 
     @RequestMapping(value = "/all/active", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPERADMIN')")
     public ResponseEntity<List<User>> getAllActive() {
         List<User> users = userService.findAllActive();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/all/removed", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPERADMIN')")
     public ResponseEntity<List<User>> getAllRemoved() {
         List<User> users = userService.findAllRemoved();
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -60,6 +62,20 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
     public ResponseEntity<?> save(@RequestBody UserDto user) {
 
+        boolean isAllowed = false;
+
+//        if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+//                .filter(r -> r.getAuthority().equalsIgnoreCase("role_superadmin"))
+//                .findAny().isPresent()){
+//            isAllowed = true;
+//        }
+        if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equalsIgnoreCase("role_superadmin"))){
+            isAllowed = true;
+        }
+        if(!isAllowed) {
+            return new ResponseEntity<>(new MessageDto("You are not allowed to perform this action."), HttpStatus.BAD_REQUEST);
+        }
         if(userService.findByUsername(user.getUsername()) != null) {
             return new ResponseEntity<>(new MessageDto("Username already exists."), HttpStatus.BAD_REQUEST);
         }

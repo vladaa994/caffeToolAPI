@@ -80,12 +80,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(UserDto userDto, int id) {
         User usr = findById(id);
+        List<Role> roles = new ArrayList<>();
         List<MessageDto> errors;
         if(usr != null){
             if(userDto.getPassword() == null){
                 errors = userValidator.checkEditUsername(userDto.getUsername());
                 if(errors == null || errors.size() == 0){
+                    Role role = roleService.findOne(userDto.getRoleId());
+                    if(role != null) {
+                        roles.add(role);
+                    }
                     usr.setUsername(userDto.getUsername());
+                    usr.setRoles(roles);
                     return userRepository.save(usr);
                 }
                 else {

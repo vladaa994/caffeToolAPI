@@ -36,7 +36,6 @@ public class Game implements Serializable{
 	private int tableNumber;
 
 	//bi-directional many-to-one association to User
-	@JsonBackReference
 	@ManyToOne
 	private User user;
 
