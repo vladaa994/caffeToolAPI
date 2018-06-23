@@ -1,7 +1,5 @@
 package caffeToolAPI.model;
 
-import com.fasterxml.jackson.annotation.*;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -24,7 +22,7 @@ public class Game implements Serializable{
 	@Column(name="end_time")
 	private Date endTime;
 
-	private boolean league;
+	private String type;
 
 	private boolean paid;
 
@@ -71,12 +69,12 @@ public class Game implements Serializable{
 		this.endTime = endTime;
 	}
 
-	public boolean getLeague() {
-		return this.league;
+	public String getType() {
+		return this.type;
 	}
 
-	public void setLeague(boolean league) {
-		this.league = league;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public boolean getPaid() {
@@ -117,10 +115,6 @@ public class Game implements Serializable{
 
 	public void setPlayers(List<Player> players) {
 		this.players = players;
-	}
-
-	public boolean isLeague() {
-		return league;
 	}
 
 	public boolean getIsPaid() {

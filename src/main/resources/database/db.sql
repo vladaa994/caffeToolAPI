@@ -28,7 +28,7 @@ CREATE TABLE game (
   `table_number` INT NOT NULL ,
   `paid` BOOLEAN NOT NULL,
   `user_id` INT NOT NULL,
-  `league` BOOLEAN NOT NULL,
+  `type` VARCHAR(255) NOT NULL,
   `deleted` BOOLEAN NOT NULL,
   `bill` FLOAT,
   PRIMARY KEY (id)

@@ -11,6 +11,10 @@ public interface GameService {
 
     List<Game> findall();
 
+    List<Game> findAllActive();
+
+    List<Game> findAllFinished();
+
     Game findById(int id);
 
     Game save(Game game);
@@ -18,4 +22,8 @@ public interface GameService {
     Game update(Game game, int id);
 
     boolean delete(int id);
+
+    Game finish(int id);
+
+    Game pay(int id);
 }

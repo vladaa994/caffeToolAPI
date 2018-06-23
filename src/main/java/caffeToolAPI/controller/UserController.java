@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,11 +65,6 @@ public class UserController {
 
         boolean isAllowed = false;
 
-//        if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-//                .filter(r -> r.getAuthority().equalsIgnoreCase("role_superadmin"))
-//                .findAny().isPresent()){
-//            isAllowed = true;
-//        }
         if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
                 .anyMatch(r -> r.getAuthority().equalsIgnoreCase("role_superadmin"))){
             isAllowed = true;
@@ -139,5 +135,12 @@ public class UserController {
         else {
             return new ResponseEntity<>(new MessageDto("User with id: " + id + "doesn't exist!"), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(value = "/current-user", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyRole('ROLE_SUPERADMIN', 'ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<User> getCurrentUser() {
+        User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }
