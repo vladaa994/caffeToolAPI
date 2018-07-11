@@ -47,7 +47,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
 
-//        //preflight fix
+        //preflight fix
         if(CorsUtils.isPreFlightRequest(request)){
             response.setStatus(HttpServletResponse.SC_OK);
             return null;

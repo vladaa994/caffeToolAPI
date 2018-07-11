@@ -1,5 +1,6 @@
 package caffeToolAPI.service.impl;
 
+import caffeToolAPI.helper.Helper;
 import caffeToolAPI.model.Game;
 import caffeToolAPI.model.Player;
 import caffeToolAPI.model.User;
@@ -7,10 +8,14 @@ import caffeToolAPI.repository.GameRepository;
 import caffeToolAPI.service.GameService;
 import caffeToolAPI.service.PlayerService;
 import caffeToolAPI.service.UserService;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -26,12 +31,14 @@ public class GameServiceImpl implements GameService{
     private GameRepository gameRepository;
     private UserService userService;
     private PlayerService playerService;
+    private Helper helper;
 
     @Autowired
-    public GameServiceImpl(GameRepository gameRepository, UserService userService, PlayerService playerService){
+    public GameServiceImpl(GameRepository gameRepository, UserService userService, PlayerService playerService, Helper helper){
         this.gameRepository = gameRepository;
         this.userService = userService;
         this.playerService = playerService;
+        this.helper = helper;
     }
 
     @Override
@@ -122,8 +129,13 @@ public class GameServiceImpl implements GameService{
     @Override
     public Game finish(int id) {
         Game game = gameRepository.findOne(id);
+        float bill = 0;
+
         if(game != null) {
             game.setEndTime(new Date());
+            float timePlayed = helper.getMinutesFromMilis(game.getEndTime().getTime() - game.getStartTime().getTime());
+            bill = timePlayed * 5;
+            game.setBill(bill);
             gameRepository.save(game);
             return game;
         }
@@ -144,5 +156,10 @@ public class GameServiceImpl implements GameService{
             return null;
         }
 
+    }
+
+    @Override
+    public Page<Game> findAllWithPagin(int page, int size) {
+        return gameRepository.findAllWithPagin(new PageRequest(page, size));
     }
 }

@@ -1,6 +1,7 @@
 package caffeToolAPI.service;
 
 import caffeToolAPI.model.Game;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface GameService {
     Game finish(int id);
 
     Game pay(int id);
+
+    Page<Game> findAllWithPagin(int page, int size);
 }

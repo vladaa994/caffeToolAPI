@@ -1,6 +1,8 @@
 package caffeToolAPI.security;
 
 import caffeToolAPI.security.service.TokenAuthenticationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +25,8 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 
     @Autowired
     private TokenAuthenticationService tokenAuthenticationService;
+
+    private final Logger logger = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {

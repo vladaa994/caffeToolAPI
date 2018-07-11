@@ -2,6 +2,8 @@ package caffeToolAPI;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.cors.CorsConfiguration;
@@ -18,9 +20,24 @@ import java.util.Arrays;
  */
 @SpringBootApplication
 @EnableJpaRepositories
-public class CaffeToolAPI {
+public class CaffeToolAPI extends SpringBootServletInitializer{
+
     public static void main(String[] args) {
         SpringApplication.run(CaffeToolAPI.class);
     }
 
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(CaffeToolAPI.class);
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowedOrigins("http://localhost", "http://localhost:4200");
+            }
+        };
+    }
 }

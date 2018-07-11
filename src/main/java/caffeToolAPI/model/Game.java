@@ -1,5 +1,8 @@
 package caffeToolAPI.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -39,6 +42,7 @@ public class Game implements Serializable{
 
 	//uni-directional many-to-many association to Player
 	@ManyToMany(cascade = CascadeType.ALL)
+//	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinTable(name = "player_game",
 			joinColumns = @JoinColumn(name = "game_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "player_id", referencedColumnName = "id"))

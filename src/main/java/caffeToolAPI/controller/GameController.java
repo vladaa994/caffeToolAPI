@@ -3,8 +3,11 @@ package caffeToolAPI.controller;
 import caffeToolAPI.dto.MessageDto;
 import caffeToolAPI.model.Game;
 import caffeToolAPI.model.User;
+import caffeToolAPI.repository.GameRepository;
 import caffeToolAPI.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +23,12 @@ import java.util.stream.Collectors;
 public class GameController {
 
     private GameService gameService;
+    private GameRepository gameRepository;
 
     @Autowired
-    public GameController(GameService gameService) {
+    public GameController(GameService gameService, GameRepository gameRepository) {
         this.gameService = gameService;
+        this.gameRepository = gameRepository;
     }
 
 
@@ -102,6 +107,12 @@ public class GameController {
         else {
             return new ResponseEntity<>(new MessageDto("Game with id: " + id + " doesn't exist."), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(value = "/findall/{page}-{size}", method = RequestMethod.GET)
+    public ResponseEntity<Page<Game>> findAllPaginated(@PathVariable int page, @PathVariable int size) {
+        Page<Game> games = gameService.findAllWithPagin(page, size);
+        return new ResponseEntity<>(games, HttpStatus.OK);
     }
 
 }

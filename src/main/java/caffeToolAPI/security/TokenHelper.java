@@ -42,7 +42,8 @@ public class TokenHelper {
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-        return new TokenDto(TOKEN_PREFIX + JWT);
+
+        return new TokenDto(TOKEN_PREFIX + JWT, username);
     }
 
     public UserDetails parse(String token) {
