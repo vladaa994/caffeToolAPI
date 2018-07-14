@@ -129,7 +129,7 @@ public class GameServiceImpl implements GameService{
     @Override
     public Game finish(int id) {
         Game game = gameRepository.findOne(id);
-        float bill = 0;
+        float bill;
 
         if(game != null) {
             game.setEndTime(new Date());
@@ -145,10 +145,20 @@ public class GameServiceImpl implements GameService{
     }
 
     @Override
-    public Game pay(int id) {
+    public Game pay(int id, int winnerId, int lostId) {
         Game game = gameRepository.findOne(id);
         if(game != null) {
             game.setPaid(true);
+            Player playerWin = playerService.findById(winnerId);
+            if(playerWin != null) {
+                playerWin.setWin(playerWin.getWin() + 1);
+                playerService.save(playerWin);
+            }
+            Player playerLost = playerService.findById(lostId);
+            if(playerLost != null) {
+                playerLost.setLost(playerLost.getLost() + 1);
+                playerService.save(playerLost);
+            }
             gameRepository.save(game);
             return game;
         }

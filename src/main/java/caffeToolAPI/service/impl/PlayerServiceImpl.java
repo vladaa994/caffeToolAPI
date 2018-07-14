@@ -42,8 +42,8 @@ public class PlayerServiceImpl implements PlayerService {
         List<MessageDto> errors = playerValidator.validate(player);
         if(errors != null) {
             player.setActive(true);
-            player.setWin(0);
-            player.setLost(0);
+            player.setWin(player.getWin());
+            player.setLost(player.getLost());
             return playerRepository.save(player);
         }
         else {

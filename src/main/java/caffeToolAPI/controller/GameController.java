@@ -98,9 +98,9 @@ public class GameController {
         }
     }
 
-    @RequestMapping(value = "/pay/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> payGame(@PathVariable int id) {
-        Game game = gameService.pay(id);
+    @RequestMapping(value = "/pay/{id}/winner/{winnerId}/lost/{lostId}", method = RequestMethod.GET)
+    public ResponseEntity<?> payGame(@PathVariable int id, @PathVariable int winnerId, @PathVariable int lostId) {
+        Game game = gameService.pay(id, winnerId, lostId);
         if(game != null) {
             return new ResponseEntity<>(game, HttpStatus.OK);
         }

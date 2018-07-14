@@ -26,7 +26,7 @@ public interface GameService {
 
     Game finish(int id);
 
-    Game pay(int id);
+    Game pay(int id, int winnerId, int lostId);
 
     Page<Game> findAllWithPagin(int page, int size);
 }
