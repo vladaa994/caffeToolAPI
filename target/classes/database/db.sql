@@ -17,6 +17,7 @@ CREATE TABLE player (
   `active` BOOLEAN NOT NULL,
   `win` INT NOT NULL,
   `lost` INT NOT NULL,
+  `image` VARCHAR(255),
   PRIMARY KEY (id)
 )ENGINE = InnoDB;
 

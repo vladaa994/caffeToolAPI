@@ -74,6 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/v2/api-docs/**");
         web.ignoring().antMatchers("/swagger.json");
         web.ignoring().antMatchers("/swagger-ui.html");
+        web.ignoring().antMatchers("/images/**");
     }
 
     @Override

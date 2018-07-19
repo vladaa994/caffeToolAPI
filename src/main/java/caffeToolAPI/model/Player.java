@@ -26,6 +26,8 @@ public class Player implements Serializable {
 
 	private int lost;
 
+	private String image;
+
 	public int getId() {
 		return this.id;
 	}
@@ -72,5 +74,13 @@ public class Player implements Serializable {
 
 	public void setLost(int lost) {
 		this.lost = lost;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 }

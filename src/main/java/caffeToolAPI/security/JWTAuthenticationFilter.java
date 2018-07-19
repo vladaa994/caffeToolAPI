@@ -34,7 +34,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         //preflight fix
-        if(CorsUtils.isPreFlightRequest(httpRequest)){
+            if(CorsUtils.isPreFlightRequest(httpRequest)){
             httpResponse.setStatus(HttpServletResponse.SC_OK);
         }
 

@@ -1,7 +1,11 @@
 package caffeToolAPI.service;
 
+import caffeToolAPI.dto.PlayerDto;
 import caffeToolAPI.model.Player;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -15,7 +19,7 @@ public interface PlayerService {
 
     Player save(Player player);
 
-    Player update(Player player, int id);
+    Player update(int id, Player player, MultipartFile file, HttpServletRequest request);
 
     void delete(Player player);
 
